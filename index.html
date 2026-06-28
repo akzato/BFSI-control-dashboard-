@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BFSI Regulatory &amp; Finance Control Room — RBI/IRDAI + Tax + Eligibility</title>
+<style>
+  :root{
+    --navy-950:#07111d;
+    --navy-900:#0b1a2c;
+    --navy-800:#102740;
+    --navy-700:#163455;
+    --teal-500:#1f9b8e;
+    --teal-400:#2cb6a7;
+    --teal-300:#6fd6c8;
+    --amber-400:#d9a440;
+    --paper:#f3efe6;
+    --line:rgba(111,214,200,0.18);
+    --serif: 'Georgia', 'Iowan Old Style', 'Palatino Linotype', serif;
+    --mono: 'IBM Plex Mono','SF Mono',Consolas,monospace;
+    --sans: 'Inter','Segoe UI',Helvetica,Arial,sans-serif;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--navy-950);
+    color:var(--paper);
+    font-family:var(--sans);
+    -webkit-font-smoothing:antialiased;
+    line-height:1.5;
+  }
+
+  body::before{
+    content:"";
+    position:fixed; inset:0;
+    background-image:
+      radial-gradient(1100px 420px at 8% -6%, rgba(31,155,142,0.10), transparent 55%),
+      repeating-linear-gradient(0deg, rgba(255,255,255,0.012) 0px, rgba(255,255,255,0.012) 1px, transparent 1px, transparent 3px);
+    pointer-events:none;
+    z-index:0;
+  }
+
+  a{color:var(--teal-300);}
+
+  .masthead{
+    position:relative;
+    border-bottom:1px solid var(--line);
+    padding:40px 6vw 24px;
+    background:
+      radial-gradient(900px 280px at 12% 0%, rgba(31,155,142,0.16), transparent 60%),
+      var(--navy-900);
+  }
+  .masthead-top{
+    display:flex; justify-content:space-between; align-items:flex-start;
+    flex-wrap:wrap; gap:18px;
+  }
+  .kicker{
+    font-family:var(--mono); font-size:11px; letter-spacing:0.18em; text-transform:uppercase;
+    color:var(--teal-300); display:flex; align-items:center; gap:10px;
+  }
+  .kicker .dot{ width:6px; height:6px; border-radius:50%; background:var(--amber-400); box-shadow:0 0 0 3px rgba(217,164,64,0.18); }
+  h1.title{ font-family:var(--serif); font-weight:400; font-size:clamp(30px, 4.2vw, 52px); margin:14px 0 6px; color:var(--paper); }
+  h1.title em{ font-style:italic; color:var(--teal-300); }
+  .subtitle{ font-size:15px; color:#b9c6cf; max-width:660px; margin:0; }
+  .meta-block{
+    font-family:var(--mono); font-size:11.5px; color:#9fb3bd; text-align:right; line-height:1.7;
+    border-left:1px solid var(--line); padding-left:18px; min-width:240px;
+  }
+  .meta-block strong{color:var(--teal-300); font-weight:600;}
+  .meta-block .source-note{ display:block; margin-top:8px; color:#7c8e98; font-size:10.5px; max-width:230px; text-align:right; }
+  .meta-block a{ color:#9fb3bd; text-decoration:none; border-bottom:1px dotted rgba(111,214,200,0.4); }
+  .meta-block a:hover{ color:var(--teal-300); }
+
+  .disclaimer-strip{
+    margin-top:24px; background:rgba(217,164,64,0.08); border:1px solid rgba(217,164,64,0.35);
+    border-radius:3px; padding:12px 16px; font-family:var(--mono); font-size:11.5px; color:#e6c989;
+    display:flex; gap:10px; align-items:flex-start;
+  }
+  .disclaimer-strip .star{color:var(--amber-400); font-size:14px; line-height:1;}
+
+  .oss-strip{
+    margin-top:14px; background:rgba(31,155,142,0.06); border:1px solid rgba(111,214,200,0.25);
+    border-radius:3px; padding:12px 16px; font-size:13px; color:#bcd6cf;
+    display:flex; gap:10px; align-items:flex-start;
+  }
+  .oss-strip .icon{color:var(--teal-300); font-size:14px; line-height:1.2;}
+
+  .author-strip{
+    margin-top:20px; display:flex; gap:28px; flex-wrap:wrap;
+    font-family:var(--mono); font-size:11px; color:#8fa3ad;
+    border-top:1px dashed var(--line); padding-top:16px;
+  }
+  .author-strip span b{color:var(--paper); font-weight:600;}
+
+  .tabbar{
+    position:sticky; top:0; z-index:30;
+    background:rgba(7,17,29,0.95); backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line); padding:0 6vw;
+    display:flex; gap:2px; overflow-x:auto;
+  }
+  .tab{
+    font-family:var(--mono); font-size:12px; letter-spacing:0.04em;
+    padding:16px 18px; color:#8fa3ad; cursor:pointer; border-bottom:2px solid transparent;
+    white-space:nowrap; transition:all .15s ease; background:none; border-top:none; border-left:none; border-right:none;
+  }
+  .tab:hover{color:var(--teal-300);}
+  .tab.active{color:var(--teal-300); border-bottom-color:var(--teal-500);}
+
+  .view{display:none; padding:42px 6vw 80px; position:relative; z-index:1;}
+  .view.show{display:block;}
+
+  .section-label{
+    font-family:var(--mono); font-size:11px; letter-spacing:0.16em; text-transform:uppercase;
+    color:var(--teal-300); margin:64px 0 6px; display:flex; align-items:center; gap:12px;
+  }
+  .section-label:first-child{margin-top:0;}
+  .section-label::after{ content:""; flex:1; height:1px; background:var(--line); }
+  .section-title{ font-family:var(--serif); font-size:26px; margin:0 0 28px; color:var(--paper); font-weight:400; }
+  .section-intro{ color:#aebcc4; font-size:14px; max-width:760px; margin:-18px 0 26px; }
+
+  .filterbar{ display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin-bottom:30px; }
+  .filterbar .label{ font-family:var(--mono); font-size:10.5px; letter-spacing:0.12em; text-transform:uppercase; color:#7c8e98; margin-right:6px; }
+  .chip{
+    font-family:var(--sans); font-size:13px; padding:7px 14px; border-radius:3px;
+    border:1px solid var(--line); background:transparent; color:#c7d3da; cursor:pointer;
+    transition:all .15s ease; white-space:nowrap;
+  }
+  .chip:hover{border-color:var(--teal-400); color:var(--teal-300);}
+  .chip.active{ background:var(--teal-500); border-color:var(--teal-500); color:#06201c; font-weight:600; }
+  .toggle-ai{ margin-left:auto; display:flex; align-items:center; gap:10px; font-family:var(--mono); font-size:11px; color:#9fb3bd; }
+  .switch{ width:38px; height:20px; border-radius:11px; background:var(--navy-700); border:1px solid var(--line); position:relative; cursor:pointer; flex:none; }
+  .switch::after{ content:""; position:absolute; top:2px; left:2px; width:14px; height:14px; border-radius:50%; background:#7c8e98; transition:all .18s ease; }
+  .switch.on{ background:rgba(31,155,142,0.35); border-color:var(--teal-400); }
+  .switch.on::after{ left:20px; background:var(--teal-300); }
+
+  .stats{ display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--line); border:1px solid var(--line); margin-bottom:8px; }
+  .stat{ background:var(--navy-900); padding:22px 20px; }
+  .stat .n{ font-family:var(--serif); font-size:28px; color:var(--teal-300); }
+  .stat .l{ font-family:var(--mono); font-size:10.5px; letter-spacing:0.08em; text-transform:uppercase; color:#9fb3bd; margin-top:4px; }
+
+  .grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(380px,1fr)); gap:20px; }
+  .card{
+    background:var(--navy-900); border:1px solid var(--line); border-top:3px solid var(--teal-500);
+    border-radius:2px; padding:24px 24px 20px; transition:border-color .2s ease; display:none;
+  }
+  .card.show{display:block;}
+  .card:hover{border-color:rgba(111,214,200,0.4);}
+  .card-head{ display:flex; justify-content:space-between; align-items:flex-start; gap:14px; margin-bottom:14px; }
+  .card-head h3{ font-family:var(--serif); font-size:20px; margin:0; color:var(--paper); font-weight:400; }
+  .card-tag{
+    font-family:var(--mono); font-size:9.5px; letter-spacing:0.1em; text-transform:uppercase;
+    color:var(--amber-400); border:1px solid rgba(217,164,64,0.35); padding:3px 8px; border-radius:2px; white-space:nowrap;
+  }
+  .card .effective{ font-family:var(--mono); font-size:11px; color:var(--teal-300); margin-bottom:14px; display:flex; align-items:center; gap:6px; }
+  .card .effective::before{content:"●"; font-size:8px;}
+  .rule-list{ list-style:none; margin:0 0 16px; padding:0; }
+  .rule-list li{ font-size:13.5px; color:#cdd8dd; padding:9px 0 9px 16px; border-left:2px solid var(--navy-700); margin-bottom:2px; position:relative; }
+  .rule-list li::before{ content:"—"; position:absolute; left:-1px; top:9px; color:var(--teal-400); font-size:11px; }
+  .rule-list li b{color:var(--paper); font-weight:600;}
+  .divider{height:1px; background:var(--line); margin:16px 0;}
+  .ai-block{
+    background:linear-gradient(135deg, rgba(31,155,142,0.08), rgba(31,155,142,0.02));
+    border:1px solid rgba(111,214,200,0.22); border-radius:3px; padding:14px 16px; margin-top:4px; display:none;
+  }
+  .ai-on .ai-block{display:block;}
+  .ai-block .ai-label{ font-family:var(--mono); font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:var(--teal-300); margin-bottom:8px; display:flex; align-items:center; gap:6px; }
+  .ai-block .ai-label::before{content:"◆"; font-size:9px;}
+  .ai-block p{font-size:13px; color:#bfe0d8; margin:0 0 8px; line-height:1.55;}
+  .ai-block .ai-meta{ font-family:var(--mono); font-size:10.5px; color:#7fb8ac; display:flex; gap:14px; flex-wrap:wrap; }
+  .source-line{ font-family:var(--mono); font-size:10px; color:#5f7178; margin-top:14px; padding-top:10px; border-top:1px dashed var(--line); }
+
+  .panel{ background:var(--navy-900); border:1px solid var(--line); padding:28px 30px; border-radius:2px; }
+  .panel h4{ font-family:var(--serif); font-weight:400; font-size:18px; margin:0 0 12px; color:var(--teal-300); }
+  .panel p, .panel li{ font-size:13.5px; color:#bcc8d0; line-height:1.7; }
+  .two-col{ display:grid; grid-template-columns:1.1fr 0.9fr; gap:20px; }
+
+  table.data{ width:100%; border-collapse:collapse; font-size:13.5px; margin:18px 0 28px; }
+  table.data th{
+    font-family:var(--mono); font-size:10.5px; letter-spacing:0.06em; text-transform:uppercase;
+    color:var(--teal-300); text-align:left; padding:10px 14px; border-bottom:1px solid var(--line);
+  }
+  table.data td{ padding:11px 14px; border-bottom:1px solid rgba(255,255,255,0.05); color:#cdd8dd; }
+  table.data tr:hover td{ background:rgba(111,214,200,0.04); }
+  table.data .hl{ color:var(--teal-300); font-weight:600; }
+  .scroll-x{ overflow-x:auto; }
+
+  .calc-grid{ display:grid; grid-template-columns:1fr 1fr; gap:24px; align-items:start; }
+  .calc-panel{ background:var(--navy-900); border:1px solid var(--line); border-radius:2px; padding:26px; }
+  .field{ margin-bottom:18px; }
+  .field label{ display:block; font-family:var(--mono); font-size:10.5px; letter-spacing:0.08em; text-transform:uppercase; color:#9fb3bd; margin-bottom:8px; }
+  .field input, .field select{
+    width:100%; background:var(--navy-800); border:1px solid var(--line); border-radius:3px;
+    color:var(--paper); padding:10px 12px; font-size:14px; font-family:var(--sans);
+  }
+  .field input:focus, .field select:focus{ outline:none; border-color:var(--teal-400); }
+  .seg{ display:flex; gap:8px; }
+  .seg button{
+    flex:1; padding:9px 10px; border-radius:3px; border:1px solid var(--line); background:transparent;
+    color:#c7d3da; font-size:12.5px; cursor:pointer; font-family:var(--sans);
+  }
+  .seg button.active{ background:var(--teal-500); border-color:var(--teal-500); color:#06201c; font-weight:600; }
+
+  .result-card{
+    background:linear-gradient(135deg, rgba(31,155,142,0.10), rgba(31,155,142,0.02));
+    border:1px solid rgba(111,214,200,0.28); border-radius:3px; padding:24px; margin-top:6px;
+  }
+  .result-row{ display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px dashed var(--line); font-size:13.5px; }
+  .result-row:last-child{ border-bottom:none; }
+  .result-row .v{ font-family:var(--mono); color:var(--teal-300); font-weight:600; }
+  .result-row.big .v{ font-size:20px; font-family:var(--serif); }
+  .verdict{
+    margin-top:16px; padding:12px 14px; border-radius:3px; font-size:13px;
+    background:rgba(31,155,142,0.12); border:1px solid rgba(111,214,200,0.3); color:var(--teal-300);
+  }
+
+  .tier-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(300px,1fr)); gap:18px; margin-bottom:10px; }
+  .tier-card{ background:var(--navy-900); border:1px solid var(--line); border-radius:2px; padding:22px; }
+  .tier-card .tier-name{ font-family:var(--serif); font-size:19px; color:var(--teal-300); margin-bottom:4px; }
+  .tier-card .tier-cities{ font-size:12.5px; color:#9fb3bd; margin-bottom:14px; line-height:1.5; }
+  .tier-card .tier-row{ display:flex; justify-content:space-between; font-size:12.5px; padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.05); color:#cdd8dd; }
+  .tier-card .tier-row span:last-child{ color:var(--paper); font-family:var(--mono); }
+
+  .reco-card{
+    background:var(--navy-900); border:1px solid var(--line); border-radius:2px; padding:26px;
+    border-left:3px solid var(--teal-500); margin-bottom:16px;
+  }
+  .reco-card h4{ font-family:var(--serif); font-size:18px; margin:0 0 10px; color:var(--paper); }
+  .reco-card .pick{ font-family:var(--mono); font-size:12px; color:var(--teal-300); margin-bottom:10px; }
+  .badge{ display:inline-block; font-family:var(--mono); font-size:10px; padding:3px 9px; border-radius:10px; margin-right:6px; }
+  .badge.good{ background:rgba(31,155,142,0.15); color:var(--teal-300); border:1px solid rgba(111,214,200,0.3); }
+  .badge.warn{ background:rgba(217,164,64,0.12); color:var(--amber-400); border:1px solid rgba(217,164,64,0.3); }
+
+  footer{
+    border-top:1px solid var(--line); padding:30px 6vw 50px;
+    font-family:var(--mono); font-size:11px; color:#6c7e89;
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px;
+  }
+  footer a{color:#8fa3ad; text-decoration:none;}
+  footer a:hover{color:var(--teal-300);}
+
+  @media (max-width:760px){
+    .stats{grid-template-columns:repeat(2,1fr);}
+    .meta-block{ text-align:left; border-left:none; border-top:1px solid var(--line); padding:14px 0 0; min-width:0; }
+    .two-col, .calc-grid{ grid-template-columns:1fr; }
+    .masthead-top{flex-direction:column;}
+  }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="masthead-top">
+    <div>
+      <div class="kicker"><span class="dot"></span> Open-Source Reference Project — BFSI Domain</div>
+      <h1 class="title">Regulatory &amp; Finance<br><em>Control Room</em></h1>
+      <p class="subtitle">A free, independent reference covering RBI/IRDAI governance across deposits, lending and distribution — plus a practical tax, eligibility, and loan/insurance decision layer, with a Gen AI overlay showing how each control could be monitored in production. Built to be forked, corrected, and reused by anyone navigating Indian BFSI rules.</p>
+    </div>
+    <div class="meta-block">
+      <div><strong>Edition</strong> — June 2026</div>
+      <div><strong>Scope</strong> — India, RBI &amp; IRDAI</div>
+      <div><strong>Author</strong> — Akshat Kapoor</div>
+      <span class="source-note">Compiled from RBI Master Directions, IRDAI circulars, Income Tax Department guidance, and regulatory press coverage current to 28 Jun 2026.</span>
+    </div>
+  </div>
+
+  <div class="disclaimer-strip">
+    <span class="star">✱</span>
+    <span>This dashboard was researched and compiled with AI assistance. Figures, slabs, and rules may contain errors, omissions, or drift from the latest circular — <b>please verify independently against rbi.org.in, irdai.gov.in, and incometax.gov.in</b> before relying on any number here for an actual financial decision. This is a knowledge/portfolio project, not financial advice.</span>
+  </div>
+
+  <div class="oss-strip">
+    <span class="icon">⌥</span>
+    <span>Open source &amp; free to use. If you spot an outdated figure or a rule that's changed, please open an issue or PR on the repo — this is meant to stay accurate through community correction, not just one person's research pass.</span>
+  </div>
+
+  <div class="author-strip">
+    <span><b>7</b> regulatory domains</span>
+    <span><b>2</b> tax regimes modelled</span>
+    <span><b>3</b> loan types × city tier eligibility</span>
+    <span><b>Gen AI overlay</b> — toggle to view applied use cases</span>
+  </div>
+</header>
+
+<nav class="tabbar" id="tabbar">
+  <button class="tab active" data-view="domains">01 · Regulatory Domains</button>
+  <button class="tab" data-view="tax">02 · Tax &amp; Benefits</button>
+  <button class="tab" data-view="eligibility">03 · Loan Eligibility by City Tier</button>
+  <button class="tab" data-view="recommender">04 · Which Loan / Insurance Fits You</button>
+  <button class="tab" data-view="methodology">05 · Methodology</button>
+</nav>
+
+<main class="view show" id="view-domains">
+
+  <div class="section-label">At a glance</div>
+  <div class="stats">
+    <div class="stat"><div class="n">Jan 1, 2026</div><div class="l">Foreclosure ban — floating-rate loans takes effect</div></div>
+    <div class="stat"><div class="n">Apr 1, 2026</div><div class="l">Deposit insurance moves to risk-based premiums</div></div>
+    <div class="stat"><div class="n">Jul 1, 2026</div><div class="l">One-click insurance / card sale ban (draft → final)</div></div>
+    <div class="stat"><div class="n">₹1,000 cr</div><div class="l">NBFC Base Layer asset ceiling under SBR</div></div>
+  </div>
+
+  <div class="section-label">Regulatory domains</div>
+  <h2 class="section-title">Control areas, by product line</h2>
+
+  <div class="filterbar">
+    <span class="label">Filter</span>
+    <button class="chip active" data-filter="all">All Domains</button>
+    <button class="chip" data-filter="insurance">Insurance</button>
+    <button class="chip" data-filter="banks">Banks</button>
+    <button class="chip" data-filter="fd">Fixed Deposits</button>
+    <button class="chip" data-filter="nbfc">NBFC / Non-NBFC</button>
+    <button class="chip" data-filter="home">Home Loan</button>
+    <button class="chip" data-filter="car">Car Loan</button>
+    <button class="chip" data-filter="bike">Two-Wheeler Loan</button>
+    <div class="toggle-ai">
+      <span>Gen AI overlay</span>
+      <div class="switch" id="aiSwitch"></div>
+    </div>
+  </div>
+
+  <div class="grid" id="cardGrid">
+
+    <div class="card" data-cat="insurance">
+      <div class="card-head"><h3>Insurance Distribution</h3><span class="card-tag">RBI + IRDAI</span></div>
+      <div class="effective">Draft norms target effective date: 1 Jul 2026</div>
+      <ul class="rule-list">
+        <li><b>One-click sales banned</b> — banks can no longer sell insurance, credit cards, or other third-party products via single-click approval; separate, explicit consent is now required.</li>
+        <li><b>Suitability checks mandated</b> — RBI's Feb 2026 statement proposes mandatory suitability assessment before any third-party product (insurance, MF, PMS) is pushed at a branch.</li>
+        <li><b>Advisory/distribution split</b> — comprehensive RE advertising &amp; sales directions aim to separate the advisory role from the distribution/commission role.</li>
+        <li><b>NBFCs cleared to distribute insurance</b> — no longer need RBI's prior nod, only IRDAI authorisation, under the Responsible Business Conduct (2nd Amendment) Directions, 2026 (eff. 1 Jan 2027).</li>
+        <li><b>Bank branding restricted</b> — a bank's name/logo cannot appear on a third-party product document; referral ≠ sale.</li>
+        <li><b>Bi-annual compliance reporting</b> — REs must file a mis-selling/compliance report every six months.</li>
+      </ul>
+      <div class="divider"></div>
+      <div class="ai-block">
+        <div class="ai-label">Gen AI applied</div>
+        <p>An LLM-based suitability-check assistant that reads the customer's existing portfolio + stated need, flags mismatched product recommendations before sale, and auto-drafts the disclosure language a frontline agent must show.</p>
+        <div class="ai-meta"><span>Input: CRM + product KFS</span><span>Output: suitability flag + disclosure draft</span><span>Control mapped: mis-selling prevention</span></div>
+      </div>
+      <div class="source-line">Sources: RBI Feb 2026 Statement on Developmental &amp; Regulatory Policies; Responsible Business Conduct (2nd Amendment) Directions, 2026; draft RE advertising/sales norms (consultation closed 4 Mar 2026).</div>
+    </div>
+
+    <div class="card" data-cat="banks">
+      <div class="card-head"><h3>Bank Types &amp; Oversight</h3><span class="card-tag">RBI</span></div>
+      <div class="effective">Deposit insurance reform effective: 1 Apr 2026</div>
+      <ul class="rule-list">
+        <li><b>Risk-based deposit insurance</b> — replaces the flat 12 paise/₹100 DICGC premium (in place since 1962) with a model tied to bank health.</li>
+        <li><b>Scheduled commercial banks</b> assessed via supervisory ratings, CAMELS scores, and estimated loss to the insurance fund.</li>
+        <li><b>RRBs &amp; cooperative banks</b> assessed on available data and risk exposure — a lighter-touch model given data constraints.</li>
+        <li><b>Vintage incentive</b> — clean-record banks get a premium discount rising ~1%/year up to 25% over time.</li>
+        <li><b>Local Area Banks &amp; Payments Banks</b> excluded from the risk model; they continue on the flat 12-paise rate.</li>
+        <li><b>Recovery-agent code unification</b> — RBI is harmonising separate bank/NBFC/HFC recovery norms into one borrower-treatment standard.</li>
+      </ul>
+      <div class="divider"></div>
+      <div class="ai-block">
+        <div class="ai-label">Gen AI applied</div>
+        <p>A call-transcript classifier (LLM + rules) that screens recovery-agent calls for coercive language or unauthorised disclosure to third parties, routing flagged calls into a complaint-governance queue automatically rather than waiting for a customer complaint to surface the issue.</p>
+        <div class="ai-meta"><span>Input: call transcripts / recordings</span><span>Output: risk-tagged escalation</span><span>Control mapped: fair-practice code, recovery conduct</span></div>
+      </div>
+      <div class="source-line">Sources: RBI Deposit Insurance reform notification (Apr 2026); RBI Feb 2026 regulatory statement on unified recovery agent guidelines.</div>
+    </div>
+
+    <div class="card" data-cat="fd">
+      <div class="card-head"><h3>Fixed Deposits</h3><span class="card-tag">RBI Master Direction</span></div>
+      <div class="effective">Master Direction — Interest Rate on Deposits, 2026, eff. 1 Apr 2026</div>
+      <ul class="rule-list">
+        <li><b>Single consolidated rulebook</b> — supersedes the 2016 deposit-interest directives, unifying rules across banks and NBFCs.</li>
+        <li><b>Minimum tenure floor: 7 days</b> — no FD can be booked below 7 days; shorter needs must go through a savings account.</li>
+        <li><b>Small-deposit relief</b> — FDs ≤ ₹10,000 can be withdrawn in full within 3 months with no interest forfeited; for larger sums, partial withdrawal up to ₹5 lakh or 50% (whichever is lower) is allowed in the same window without losing interest on the remainder.</li>
+        <li><b>Mandatory penalty disclosure</b> — premature-withdrawal penalty structure must be disclosed at the time of booking, not after.</li>
+        <li><b>Non-callable FD exceptions</b> — premature exit is still permitted for bankruptcy, court order, liquidation, or depositor's demise.</li>
+        <li><b>Maturity-alert mandate</b> — institutions must proactively notify depositors ahead of maturity to prevent silent auto-renewal.</li>
+        <li><b>TDS unchanged</b> — 10% TDS above ₹40,000 interest/year (₹50,000 for senior citizens) continues.</li>
+      </ul>
+      <div class="divider"></div>
+      <div class="ai-block">
+        <div class="ai-label">Gen AI applied</div>
+        <p>A natural-language FD-terms generator that converts each bank's penalty matrix into a plain-English KFS summary at booking, plus a chatbot trained only on the bank's own disclosed terms — closing the "I didn't know the penalty" complaint category at the root.</p>
+        <div class="ai-meta"><span>Input: FD penalty schedule (structured)</span><span>Output: plain-language disclosure copy</span><span>Control mapped: disclosure-gap complaints</span></div>
+      </div>
+      <div class="source-line">Sources: RBI Master Direction – Interest Rate on Deposits, 2026 (1 Apr 2026); RBI FD rule updates effective 1 Jan 2026.</div>
+    </div>
+
+    <div class="card" data-cat="nbfc">
+      <div class="card-head"><h3>NBFC vs Non-NBFC Classification</h3><span class="card-tag">Scale-Based Regulation</span></div>
+      <div class="effective">SBR Amendment Directions effective: 1 Apr 2026</div>
+      <ul class="rule-list">
+        <li><b>Four-layer structure</b> — Base, Middle, Upper, Top Layer, with regulatory intensity rising at each layer; replaced the older NBFC-ND / NBFC-ND-SI / NBFC-D labels from Oct 2022.</li>
+        <li><b>Base Layer</b> — non-deposit NBFCs with assets &lt; ₹1,000 crore; minimum capital (NOF) raised to ₹10 crore; 90-day NPA recognition applies uniformly.</li>
+        <li><b>Middle Layer</b> — all deposit-taking NBFCs (any size) + non-deposit NBFCs ≥ ₹1,000 crore; PCA framework applies here and above.</li>
+        <li><b>Upper Layer</b> — auto-qualifies at ₹1 lakh crore+ assets; also scored on leverage, interconnectedness, complexity; top-10 NBFCs by size always included.</li>
+        <li><b>New "Unregistered Type I" category (2026)</b> — entities with no public funds and no customer interface, assets &lt; ₹1,000 crore, are now exempt from RBI registration; voluntary deregistration window open till 30 Sep 2026.</li>
+        <li><b>Non-NBFC distinction</b> — an entity is only an NBFC if lending/investment is its <i>principal business</i> (≥50% of assets and income); operating companies financing only their own customers fall outside this net.</li>
+      </ul>
+      <div class="divider"></div>
+      <div class="ai-block">
+        <div class="ai-label">Gen AI applied</div>
+        <p>A layer-classification assistant that ingests quarterly balance-sheet data and auto-flags an NBFC approaching a layer threshold, giving compliance teams lead time to prep the heavier reporting pack before the regulatory trigger fires.</p>
+        <div class="ai-meta"><span>Input: quarterly financials</span><span>Output: layer-migration early warning</span><span>Control mapped: proactive regulatory readiness</span></div>
+      </div>
+      <div class="source-line">Sources: RBI (NBFC – SBR) Amendment Directions, 2026; RBI Governor remarks, Apr 2026, on the layer-framework revision.</div>
+    </div>
+
+    <div class="card" data-cat="home">
+      <div class="card-head"><h3>Home Loans</h3><span class="card-tag">RBI Directions</span></div>
+      <div class="effective">Pre-payment Charges Directions, 2025 — eff. 1 Jan 2026</div>
+      <ul class="rule-list">
+        <li><b>No foreclosure charge on floating-rate home loans</b> — applies to all individual borrowers, with or without co-obligants, regardless of fund source.</li>
+        <li><b>Fixed-rate loans still chargeable</b> — lenders may levy up to ~3% penalty if disclosed upfront in the sanction letter and loan agreement.</li>
+        <li><b>LTV caps by ticket size</b> — up to 90% LTV for loans ≤ ₹30 lakh, 80% for ₹30–75 lakh, ~75% above that.</li>
+        <li><b>Repo-linked external benchmarking</b> — floating-rate home loans must reset at least quarterly against an external benchmark.</li>
+        <li><b>Free balance transfer</b> — floating-rate borrowers can shift lenders without foreclosure cost to chase a better rate.</li>
+        <li><b>Document return obligation</b> — original property documents must be returned promptly on full closure.</li>
+      </ul>
+      <div class="divider"></div>
+      <div class="ai-block">
+        <div class="ai-label">Gen AI applied</div>
+        <p>An automated KFS-comparison tool that checks a lender's sanction letter against RBI's disclosure checklist (foreclosure clause, LTV, reset frequency) using document extraction + LLM review — catching non-compliant fine print before it reaches a customer complaint.</p>
+        <div class="ai-meta"><span>Input: sanction letter (PDF)</span><span>Output: clause-by-clause compliance diff</span><span>Control mapped: disclosure audit</span></div>
+      </div>
+      <div class="source-line">Sources: RBI (Pre-payment Charges on Loans) Directions, 2025, eff. 1 Jan 2026; RBI home loan LTV/benchmarking norms, 2026 update.</div>
+    </div>
+
+    <div class="card" data-cat="car">
+      <div class="card-head"><h3>Car Loans</h3><span class="card-tag">RBI Directions</span></div>
+      <div class="effective">Same Pre-payment Directions framework — eff. 1 Jan 2026</div>
+      <ul class="rule-list">
+        <li><b>Floating-rate car loans</b> — foreclosure/prepayment charges banned, same individual-borrower protection as home loans.</li>
+        <li><b>Fixed-rate car loans</b> — penalty still permitted; this is the more common structure in auto lending today, so the practical benefit is narrower than for home loans.</li>
+        <li><b>Lock-in clauses are lender policy, not RBI mandate</b> — a lock-in can override the "no charge" benefit during its window.</li>
+        <li><b>Mandatory upfront disclosure</b> — penalty calculation method must appear in the Key Facts Statement.</li>
+        <li><b>No retrospective fee revival</b> — if a charge was waived once, it cannot be re-applied later on the same loan.</li>
+      </ul>
+      <div class="divider"></div>
+      <div class="ai-block">
+        <div class="ai-label">Gen AI applied</div>
+        <p>A KFS-vs-rate-type classifier that flags whether a customer's auto loan is fixed or floating at intake and auto-populates the correct foreclosure-rights notice in the welcome kit — preventing the most common car-loan complaint root cause.</p>
+        <div class="ai-meta"><span>Input: loan rate-type field</span><span>Output: tailored rights notice</span><span>Control mapped: KFS accuracy</span></div>
+      </div>
+      <div class="source-line">Sources: RBI (Pre-payment Charges on Loans) Directions, 2025; RBI circular, 2 Jul 2025, on REs' divergent pre-payment practices.</div>
+    </div>
+
+    <div class="card" data-cat="bike">
+      <div class="card-head"><h3>Two-Wheeler / Bike Loans</h3><span class="card-tag">RBI Directions</span></div>
+      <div class="effective">Same Pre-payment Directions framework — eff. 1 Jan 2026</div>
+      <ul class="rule-list">
+        <li><b>Floating-rate two-wheeler loans</b> — covered under the same individual-borrower foreclosure ban as cars and personal loans; most two-wheeler loans are fixed-rate, so coverage is the narrowest of the three vehicle categories.</li>
+        <li><b>Smaller-ticket, shorter-tenure profile</b> — typically 1–4 years, so prepayment penalty exposure (where it exists) is concentrated in the early months.</li>
+        <li><b>NBFC-heavy distribution channel</b> — a large share of two-wheeler financing runs through NBFCs, so the NBFC layer + fair-practice code is the more relevant control surface here.</li>
+        <li><b>Disclosure parity</b> — same KFS and sanction-letter disclosure requirement applies regardless of loan size.</li>
+      </ul>
+      <div class="divider"></div>
+      <div class="ai-block">
+        <div class="ai-label">Gen AI applied</div>
+        <p>A lightweight complaint-pattern model trained on two-wheeler loan grievance text, used to cluster recurring root causes by NBFC partner — feeding a quarterly governance scorecard instead of a manual tagging exercise.</p>
+        <div class="ai-meta"><span>Input: complaint text corpus</span><span>Output: root-cause cluster + partner scorecard</span><span>Control mapped: complaint governance reporting</span></div>
+      </div>
+      <div class="source-line">Sources: RBI (Pre-payment Charges on Loans) Directions, 2025; RBI NBFC Scale-Based Regulation framework (financing-channel context).</div>
+    </div>
+
+  </div>
+</main>
+
+<main class="view" id="view-tax">
+
+  <div class="section-label">Income tax — salaried &amp; business</div>
+  <h2 class="section-title">New vs old regime, FY 2025-26 (AY 2026-27)</h2>
+  <p class="section-intro">Slab rates were unchanged by Budget 2026 — same structure carries into FY 2026-27. New regime is the default; old regime must be actively chosen (Form 10-IEA for business income).</p>
+
+  <div class="scroll-x">
+  <table class="data">
+    <tr><th>Income slab</th><th>New regime rate</th><th>Old regime rate (&lt;60 yrs)</th></tr>
+    <tr><td>₹0 – 4 lakh</td><td class="hl">Nil</td><td>Nil up to ₹2.5L</td></tr>
+    <tr><td>₹4 – 8 lakh</td><td class="hl">5%</td><td>5% (₹2.5–5L)</td></tr>
+    <tr><td>₹8 – 12 lakh</td><td class="hl">10%</td><td>20% (₹5–10L)</td></tr>
+    <tr><td>₹12 – 16 lakh</td><td class="hl">15%</td><td>20% (₹5–10L)</td></tr>
+    <tr><td>₹16 – 20 lakh</td><td class="hl">20%</td><td>30% (above ₹10L)</td></tr>
+    <tr><td>₹20 – 24 lakh</td><td class="hl">25%</td><td>30% (above ₹10L)</td></tr>
+    <tr><td>Above ₹24 lakh</td><td class="hl">30%</td><td>30% (above ₹10L)</td></tr>
+  </table>
+  </div>
+
+  <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); margin-bottom:40px;">
+    <div class="card show" style="border-top-color:var(--teal-400);">
+      <h3 style="font-family:var(--serif); font-size:18px; margin:0 0 10px;">Section 87A rebate</h3>
+      <p style="font-size:13.5px; color:#cdd8dd;">New regime: taxable income up to <b>₹12 lakh</b> → zero tax (rebate up to ₹60,000). Old regime: rebate only up to ₹5 lakh income (₹12,500 max).</p>
+    </div>
+    <div class="card show" style="border-top-color:var(--teal-400);">
+      <h3 style="font-family:var(--serif); font-size:18px; margin:0 0 10px;">Standard deduction</h3>
+      <p style="font-size:13.5px; color:#cdd8dd;">New regime: <b>₹75,000</b> for salaried/pensioners — pushes the effective tax-free ceiling to ~₹12.75 lakh. Old regime: ₹50,000.</p>
+    </div>
+    <div class="card show" style="border-top-color:var(--teal-400);">
+      <h3 style="font-family:var(--serif); font-size:18px; margin:0 0 10px;">80C / 80D (old regime only)</h3>
+      <p style="font-size:13.5px; color:#cdd8dd;"><b>80C:</b> ₹1.5 lakh (PPF, ELSS, life insurance, tuition fees, 5-yr tax-saver FD). <b>80D:</b> ₹25,000 self+family, +₹25,000 parents (&lt;60), or +₹50,000 if parents are senior citizens.</p>
+    </div>
+  </div>
+
+  <div class="section-label">For business income / self-employed</div>
+  <h2 class="section-title">What changes if you're not on a salary</h2>
+  <div class="panel" style="margin-bottom:40px;">
+    <p><b>Regime switching is restricted.</b> Salaried taxpayers can switch between old/new every year. If you have business or professional income, you can switch out of the new regime only <b>once</b> in your lifetime via Form 10-IEA, and switching back is allowed only once more — plan the choice carefully rather than year-to-year.</p>
+    <p><b>HRA, LTA not applicable</b> the same way — business income doesn't carry salary-linked exemptions; deductions instead come from allowable business expenses, depreciation, and Chapter VI-A items if on the old regime.</p>
+    <p><b>Presumptive taxation (Sec 44AD/44ADA)</b> remains available for eligible small businesses/professionals regardless of regime choice, taxing a deemed percentage of turnover rather than actual profit — worth checking if turnover is below the threshold.</p>
+    <p><b>GST registration</b> is a separate, parallel obligation once turnover crosses ₹20–40 lakh (services/goods, threshold varies by state) — distinct from income tax regime choice.</p>
+  </div>
+
+  <div class="section-label">Calculator</div>
+  <h2 class="section-title">Quick regime comparison</h2>
+  <div class="calc-grid">
+    <div class="calc-panel">
+      <div class="field">
+        <label>Gross annual income (₹)</label>
+        <input type="number" id="taxIncome" value="1200000" min="0" step="10000">
+      </div>
+      <div class="field">
+        <label>Are you salaried?</label>
+        <div class="seg" id="seg-salaried">
+          <button class="active" data-val="yes">Salaried</button>
+          <button data-val="no">Business / Self-employed</button>
+        </div>
+      </div>
+      <div class="field">
+        <label>Old-regime deductions you can actually claim (₹) — 80C + 80D + home loan interest etc.</label>
+        <input type="number" id="taxDeductions" value="150000" min="0" step="5000">
+      </div>
+    </div>
+    <div class="result-card">
+      <div class="result-row"><span>New regime — tax payable</span><span class="v" id="resNew">—</span></div>
+      <div class="result-row"><span>Old regime — tax payable</span><span class="v" id="resOld">—</span></div>
+      <div class="result-row big"><span>You save</span><span class="v" id="resSave">—</span></div>
+      <div class="verdict" id="resVerdict">Enter your numbers to see which regime wins.</div>
+    </div>
+  </div>
+
+</main>
+
+<main class="view" id="view-eligibility">
+
+  <div class="section-label">City classification</div>
+  <h2 class="section-title">Tier 1 / Tier 2 / Tier 3 — what lenders actually mean by it</h2>
+  <p class="section-intro">Lenders use the popular real-estate/HR usage of "Tier 1/2/3" (by metro status and cost of living) rather than RBI's formal 6-tier population bands — this is the version that shows up in loan eligibility and salary-slab discussions.</p>
+
+  <div class="tier-grid">
+    <div class="tier-card">
+      <div class="tier-name">Tier 1</div>
+      <div class="tier-cities">Delhi NCR, Mumbai, Bengaluru, Chennai, Hyderabad, Kolkata, Pune, Ahmedabad</div>
+      <div class="tier-row"><span>Typical entry salary (lender comfort)</span><span>₹6–8 LPA+</span></div>
+      <div class="tier-row"><span>Home loan eligible income (example)</span><span>₹40,000+/mo net</span></div>
+      <div class="tier-row"><span>Cost-of-living loading</span><span>Highest</span></div>
+    </div>
+    <div class="tier-card">
+      <div class="tier-name">Tier 2</div>
+      <div class="tier-cities">Jaipur, Lucknow, Indore, Coimbatore, Surat, Chandigarh, Bhubaneswar, Vadodara, Nagpur</div>
+      <div class="tier-row"><span>Typical entry salary (lender comfort)</span><span>₹4–6 LPA+</span></div>
+      <div class="tier-row"><span>Home loan eligible income (example)</span><span>₹25,000+/mo net</span></div>
+      <div class="tier-row"><span>Cost-of-living loading</span><span>Moderate</span></div>
+    </div>
+    <div class="tier-card">
+      <div class="tier-name">Tier 3 / Tier 4</div>
+      <div class="tier-cities">Smaller district towns &amp; emerging urban centres — e.g. Tier 3 industrial towns, semi-urban belts</div>
+      <div class="tier-row"><span>Typical entry salary (lender comfort)</span><span>₹2.5–4 LPA+</span></div>
+      <div class="tier-row"><span>Home loan eligible income (example)</span><span>₹15,000+/mo net</span></div>
+      <div class="tier-row"><span>Cost-of-living loading</span><span>Lowest</span></div>
+    </div>
+  </div>
+  <p style="font-size:12px; color:#7c8e98; font-family:var(--mono); margin-bottom:50px;">Figures above are illustrative lender-comfort bands, not official RBI thresholds — every bank/NBFC sets its own FOIR and income-multiple policy. Confirm with the specific lender.</p>
+
+  <div class="section-label">1 · Home Loan</div>
+  <h2 class="section-title">Eligibility, by city tier &amp; salary slab</h2>
+  <div class="scroll-x">
+  <table class="data">
+    <tr><th>City tier</th><th>Net monthly salary</th><th>Typical FOIR cap</th><th>Indicative loan eligibility*</th><th>Example city</th></tr>
+    <tr><td>Tier 1</td><td>₹50,000</td><td>50–55%</td><td>~₹25–30 lakh</td><td>Mumbai, Bengaluru</td></tr>
+    <tr><td>Tier 1</td><td>₹1,00,000</td><td>50–55%</td><td>~₹55–65 lakh</td><td>Delhi NCR, Pune</td></tr>
+    <tr><td>Tier 2</td><td>₹40,000</td><td>50–55%</td><td>~₹22–26 lakh</td><td>Jaipur, Indore</td></tr>
+    <tr><td>Tier 2</td><td>₹80,000</td><td>50–55%</td><td>~₹45–52 lakh</td><td>Coimbatore, Lucknow</td></tr>
+    <tr><td>Tier 3</td><td>₹30,000</td><td>45–50%</td><td>~₹15–18 lakh</td><td>Smaller district towns</td></tr>
+  </table>
+  </div>
+  <p style="font-size:12px; color:#7c8e98; font-family:var(--mono); margin-top:-10px; margin-bottom:40px;">*FOIR = Fixed Obligation to Income Ratio. Indicative eligibility assumes ~20-year tenure, no major existing EMIs, and a representative floating rate; actual sanction depends on credit score, employer category, and the specific lender's policy.</p>
+
+  <div class="section-label">2 · Car Loan</div>
+  <h2 class="section-title">Eligibility, by city tier &amp; salary slab</h2>
+  <div class="scroll-x">
+  <table class="data">
+    <tr><th>City tier</th><th>Net monthly salary</th><th>Typical FOIR cap</th><th>Indicative loan eligibility*</th><th>Usual LTV</th></tr>
+    <tr><td>Tier 1</td><td>₹35,000</td><td>50%</td><td>~₹8–10 lakh</td><td>Up to 90% on-road</td></tr>
+    <tr><td>Tier 1</td><td>₹75,000</td><td>50%</td><td>~₹18–22 lakh</td><td>Up to 90% on-road</td></tr>
+    <tr><td>Tier 2</td><td>₹30,000</td><td>50%</td><td>~₹6–8 lakh</td><td>80–85% on-road</td></tr>
+    <tr><td>Tier 3</td><td>₹25,000</td><td>45%</td><td>~₹4–5 lakh</td><td>75–80% on-road</td></tr>
+  </table>
+  </div>
+  <p style="font-size:12px; color:#7c8e98; font-family:var(--mono); margin-top:-10px; margin-bottom:40px;">*Car loans are usually fixed-rate, shorter tenure (3–7 yrs) — eligibility is more income-multiple driven than tenure-stretched compared to home loans.</p>
+
+  <div class="section-label">3 · Two-Wheeler / Scooty Loan</div>
+  <h2 class="section-title">Eligibility, by city tier &amp; salary slab</h2>
+  <div class="scroll-x">
+  <table class="data">
+    <tr><th>City tier</th><th>Net monthly salary</th><th>Indicative loan eligibility*</th><th>Usual LTV</th><th>Typical tenure</th></tr>
+    <tr><td>Tier 1</td><td>₹15,000+</td><td>~₹70,000 – ₹1.2 lakh</td><td>Up to 95–100% on-road</td><td>1–3 yrs</td></tr>
+    <tr><td>Tier 2</td><td>₹12,000+</td><td>~₹60,000 – ₹1 lakh</td><td>90–95% on-road</td><td>1–3 yrs</td></tr>
+    <tr><td>Tier 3</td><td>₹10,000+</td><td>~₹40,000 – ₹70,000</td><td>80–90% on-road</td><td>1–2 yrs</td></tr>
+  </table>
+  </div>
+  <p style="font-size:12px; color:#7c8e98; font-family:var(--mono); margin-top:-10px;">*Two-wheeler loans run almost entirely through NBFCs at fixed rates — the most accessible entry-level credit product across all city tiers, with the lowest income bar of the three.</p>
+
+</main>
+
+<main class="view" id="view-recommender">
+
+  <div class="section-label">Decision tool</div>
+  <h2 class="section-title">Which loan or cover actually fits your salary</h2>
+  <p class="section-intro">Enter a monthly income and get a directional read on vehicle-loan choice, term cover, and health cover. This is a simplified heuristic for a free public reference, not underwriting — every real case depends on liabilities, dependents, existing cover, and city.</p>
+
+  <div class="calc-panel" style="margin-bottom:30px;">
+    <div class="field">
+      <label>Net monthly salary (₹)</label>
+      <input type="number" id="recoSalary" value="60000" min="0" step="1000">
+    </div>
+    <div class="field">
+      <label>City tier</label>
+      <div class="seg" id="seg-tier">
+        <button class="active" data-val="1">Tier 1</button>
+        <button data-val="2">Tier 2</button>
+        <button data-val="3">Tier 3</button>
+      </div>
+    </div>
+    <div class="field">
+      <label>Dependents (spouse / kids / parents relying on your income)</label>
+      <input type="number" id="recoDependents" value="2" min="0" max="10" step="1">
+    </div>
+    <div class="field">
+      <label>Age</label>
+      <input type="number" id="recoAge" value="30" min="18" max="65" step="1">
+    </div>
+  </div>
+
+  <div id="recoOutput"></div>
+
+</main>
+
+<main class="view" id="view-methodology">
+  <div class="section-label">Methodology</div>
+  <h2 class="section-title">How this was built</h2>
+  <div class="two-col">
+    <div class="panel">
+      <h4>Research approach</h4>
+      <p>Every regulatory domain was checked against RBI Master Directions, RBI policy statements, and IRDAI circulars current to <b>28 June 2026</b>, cross-referenced with regulatory press coverage to confirm effective dates. Where a rule is still in draft (e.g. the one-click sales ban), that is marked explicitly rather than presented as final. Tax slabs reflect FY 2025-26 (AY 2026-27), unchanged by Budget 2026 into FY 2026-27. Eligibility/salary-slab figures are illustrative lender-comfort bands compiled from publicly available lending guidance, not a specific bank's actual policy.</p>
+    </div>
+    <div class="panel">
+      <h4>Why this exists</h4>
+      <p>Built as a free, open reference for anyone navigating Indian BFSI rules — students, analysts, first-time borrowers — alongside a working point of view on where a Gen AI layer fits inside an existing compliance control. The goal is a control that catches issues earlier and reports on itself, not a control that gets replaced.</p>
+    </div>
+  </div>
+
+  <div class="panel" style="margin-top:24px; border-color:rgba(217,164,64,0.35);">
+    <h4 style="color:var(--amber-400);">✱ On accuracy</h4>
+    <p>This dashboard was researched and assembled with AI assistance, including web search across recent regulatory and financial-news coverage. AI-assisted research can misdate a circular, miss a subsequent amendment, or carry forward an error from a secondary source. <b>Treat every figure here as a starting point for your own verification</b> — especially before using anything for a real loan/insurance decision. Primary sources: rbi.org.in, irdai.gov.in, incometax.gov.in. Corrections and PRs welcome — this stays accurate through community input, not a one-time research pass.</p>
+  </div>
+</main>
+
+<footer>
+  <span>Compiled June 2026 by Akshat Kapoor · Open-source reference build · AI-assisted research — verify independently</span>
+  <span>rbi.org.in · irdai.gov.in · incometax.gov.in</span>
+</footer>
+
+<script>
+  const tabs = document.querySelectorAll('.tab');
+  const views = document.querySelectorAll('.view');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      views.forEach(v => v.classList.remove('show'));
+      tab.classList.add('active');
+      document.getElementById('view-' + tab.dataset.view).classList.add('show');
+      window.scrollTo({top:0, behavior:'instant'});
+    });
+  });
+
+  const chips = document.querySelectorAll('.chip');
+  const cards = document.querySelectorAll('#cardGrid .card');
+  function applyFilter(filter){
+    cards.forEach(c => c.classList.toggle('show', filter === 'all' || c.dataset.cat === filter));
+  }
+  applyFilter('all');
+  chips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      chips.forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      applyFilter(chip.dataset.filter);
+    });
+  });
+
+  const aiSwitch = document.getElementById('aiSwitch');
+  const domainsView = document.getElementById('view-domains');
+  aiSwitch.addEventListener('click', () => {
+    aiSwitch.classList.toggle('on');
+    domainsView.classList.toggle('ai-on');
+  });
+
+  function computeNewRegimeTax(income){
+    const std = 75000;
+    let taxable = Math.max(0, income - std);
+    const slabs = [
+      [400000, 0], [800000, 0.05], [1200000, 0.10], [1600000, 0.15],
+      [2000000, 0.20], [2400000, 0.25], [Infinity, 0.30]
+    ];
+    let tax = 0, prev = 0;
+    for (const [limit, rate] of slabs){
+      if (taxable > prev){
+        const amt = Math.min(taxable, limit) - prev;
+        tax += amt * rate;
+        prev = limit;
+      } else break;
+    }
+    if (taxable <= 1200000) tax = 0;
+    return Math.round(tax * 1.04);
+  }
+
+  function computeOldRegimeTax(income, deductions, isSalaried){
+    const std = isSalaried ? 50000 : 0;
+    let taxable = Math.max(0, income - std - deductions);
+    const slabs = [[250000,0],[500000,0.05],[1000000,0.20],[Infinity,0.30]];
+    let tax = 0, prev = 0;
+    for (const [limit, rate] of slabs){
+      if (taxable > prev){
+        const amt = Math.min(taxable, limit) - prev;
+        tax += amt * rate;
+        prev = limit;
+      } else break;
+    }
+    if (taxable <= 500000) tax = 0;
+    return Math.round(tax * 1.04);
+  }
+
+  function fmtINR(n){
+    return '₹' + n.toLocaleString('en-IN');
+  }
+
+  function updateTaxCalc(){
+    const income = parseFloat(document.getElementById('taxIncome').value) || 0;
+    const deductions = parseFloat(document.getElementById('taxDeductions').value) || 0;
+    const isSalaried = document.querySelector('#seg-salaried .active').dataset.val === 'yes';
+
+    const newTax = computeNewRegimeTax(income);
+    const oldTax = computeOldRegimeTax(income, deductions, isSalaried);
+    const diff = Math.abs(newTax - oldTax);
+
+    document.getElementById('resNew').textContent = fmtINR(newTax);
+    document.getElementById('resOld').textContent = fmtINR(oldTax);
+    document.getElementById('resSave').textContent = fmtINR(diff) + (newTax <= oldTax ? ' on New' : ' on Old');
+
+    const verdictEl = document.getElementById('resVerdict');
+    if (newTax <= oldTax){
+      verdictEl.textContent = "New regime looks better for these numbers — lower slabs are outweighing what you'd give up in deductions.";
+    } else {
+      verdictEl.textContent = "Old regime looks better here — your deductions are large enough to beat the new regime's lower rates.";
+    }
+  }
+
+  document.getElementById('taxIncome').addEventListener('input', updateTaxCalc);
+  document.getElementById('taxDeductions').addEventListener('input', updateTaxCalc);
+  document.querySelectorAll('#seg-salaried button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#seg-salaried button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      updateTaxCalc();
+    });
+  });
+  updateTaxCalc();
+
+  function updateReco(){
+    const salary = parseFloat(document.getElementById('recoSalary').value) || 0;
+    const annual = salary * 12;
+    const tier = document.querySelector('#seg-tier .active').dataset.val;
+    const dependents = parseFloat(document.getElementById('recoDependents').value) || 0;
+    const age = parseFloat(document.getElementById('recoAge').value) || 30;
+
+    let html = '';
+
+    let vehiclePick, vehicleReason, vehicleBadges;
+    if (salary < 20000){
+      vehiclePick = 'Two-wheeler loan';
+      vehicleReason = 'At this income, EMI headroom under a sane FOIR (~40-45%) realistically supports only a two-wheeler. A car EMI would eat too much of take-home pay relative to other obligations.';
+      vehicleBadges = ['Two-wheeler — comfortable fit', 'Car — stretch, not advised yet'];
+    } else if (salary < 50000){
+      vehiclePick = 'Two-wheeler now, entry car loan possible';
+      vehicleReason = 'A two-wheeler loan is comfortably affordable. A small/entry-segment car loan is feasible if you have no other major EMI running, but it will use a meaningful share of monthly cash flow — model the EMI against rent/other costs first.';
+      vehicleBadges = ['Two-wheeler — comfortable fit', 'Entry car — feasible with care'];
+    } else if (salary < 100000){
+      vehiclePick = 'Car loan (compact/mid segment)';
+      vehicleReason = 'Income supports a car loan in the compact-to-mid segment comfortably. A two-wheeler loan is a non-issue at this level — the real decision is car segment vs down payment size, not eligibility.';
+      vehicleBadges = ['Car — comfortable fit', 'Two-wheeler — easily affordable'];
+    } else {
+      vehiclePick = 'Car loan (broader segment choice)';
+      vehicleReason = "At this income, eligibility opens up across most car segments; the constraint becomes your own preference and down payment, not the lender's comfort with your salary.";
+      vehicleBadges = ['Car — wide segment choice', 'Two-wheeler — easily affordable'];
+    }
+
+    const termCoverMultiple = dependents > 0 ? 15 : 10;
+    const termCover = Math.round((annual * termCoverMultiple) / 100000) * 100000;
+    const termPremiumEstimate = Math.round((termCover / 100000) * (age < 30 ? 60 : age < 40 ? 90 : 150));
+
+    let healthCover;
+    if (tier === '1') healthCover = dependents > 1 ? '₹15–20 lakh family floater' : '₹10 lakh';
+    else if (tier === '2') healthCover = dependents > 1 ? '₹10–15 lakh family floater' : '₹7–10 lakh';
+    else healthCover = dependents > 1 ? '₹7–10 lakh family floater' : '₹5 lakh';
+
+    html += `
+      <div class="reco-card">
+        <h4>Vehicle loan</h4>
+        <div class="pick">Suggested: ${vehiclePick}</div>
+        <p style="font-size:13.5px; color:#cdd8dd; margin:0 0 12px;">${vehicleReason}</p>
+        <div>${vehicleBadges.map(b => `<span class="badge ${b.includes('comfortable')||b.includes('wide')||b.includes('easily') ? 'good':'warn'}">${b}</span>`).join('')}</div>
+      </div>
+
+      <div class="reco-card">
+        <h4>Term life insurance</h4>
+        <div class="pick">Suggested cover: ${fmtINR(termCover)} (≈${termCoverMultiple}× annual income)</div>
+        <p style="font-size:13.5px; color:#cdd8dd; margin:0 0 12px;">With ${dependents} dependent${dependents===1?'':'s'} relying on this income, a ${termCoverMultiple}× annual-income cover is the common starting heuristic — higher if you carry a large home loan, lower if you're single with no dependents. Rough indicative annual premium for a healthy non-smoker at age ${age}: <b>${fmtINR(termPremiumEstimate)}</b> (varies significantly by insurer, health, and rider choices).</p>
+        <div><span class="badge good">Pure term — most cover per rupee</span>${dependents===0 ? '<span class="badge warn">Lower urgency if no dependents</span>' : ''}</div>
+      </div>
+
+      <div class="reco-card">
+        <h4>Health insurance</h4>
+        <div class="pick">Suggested cover: ${healthCover}</div>
+        <p style="font-size:13.5px; color:#cdd8dd; margin:0 0 12px;">Tier ${tier} hospital costs scale with the city — metro treatment costs push the needed cover higher even at the same income level. ${dependents > 0 ? 'A family floater is usually more cost-efficient than separate individual policies once you have dependents to cover.' : 'An individual policy is fine for now; consider porting to a family floater if your dependents count changes.'}</p>
+        <div><span class="badge good">Family floater recommended where dependents &gt; 1</span></div>
+      </div>
+    `;
+
+    document.getElementById('recoOutput').innerHTML = html;
+  }
+
+  ['recoSalary','recoDependents','recoAge'].forEach(id => {
+    document.getElementById(id).addEventListener('input', updateReco);
+  });
+  document.querySelectorAll('#seg-tier button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#seg-tier button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      updateReco();
+    });
+  });
+  updateReco();
+</script>
+
+</body>
+</html>
